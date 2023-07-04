@@ -2,8 +2,6 @@
 
 ## Builtin Hooks
 
-{include} ./Test.md
-
 ### [`useMemo`](https://react.dev/reference/react/useMemo) Hook
 `useMemo` Hook lets you cache the result of a calculation between re-renders.
 ```tsx
