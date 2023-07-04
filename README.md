@@ -11,7 +11,7 @@ const cachedValue = useMemo(calculateValue, dependencies)
 #### Example
 Consider the following react code:
 
-```tsx
+```tsx{}[App.tsx]
 import { useMemo, useState } from "react";
 
 function App() {
@@ -52,7 +52,7 @@ export default App;
 
 Every time we change the theme of the application using `useState` Hook, it triggers the re-renders of the whole `App` component, and `slowFunction` is re-calculated during each re-render even though the `number` doesn't change; as a result, the theme updates with some noticeable delay. To avoid re-calculation of the `slowFunction` during each re-render, we will wrap the execution of `slowFunction` inside `useMemo` Hook with `number` inside the dependency array. Now, during each re-render, if `number` value doesn't change `resultedNumber` will use the previously cached value from the `slowFunction`, and we can change the theme with almost no delay.
 
-```tsx
+```tsx{}[App.tsx]
 import { useMemo, useState } from "react";
 
 function App() {
@@ -93,7 +93,7 @@ export default App;
 
 Now, suppose we `console.log` a message every time we change the theme of the application:
 
-```tsx
+```tsx{}[App.tsx]
 import { useEffect, useMemo, useState } from "react";
 
 type ThemeStyle = {
@@ -143,7 +143,7 @@ export default App;
 
 But the problem is `useEffect` Hook with `themeStyle` will also run every time the `App` component re-renders because of the change of the reference of the `themeStyle`. To make sure that we only `console.log` message `"Theme has changed!"` when the actual value of the  `themeStyle` changes, not the reference, we can wrap the `themeStyle` inside `useMemo` Hook with `dark` inside the dependency array.
 
-```tsx
+```tsx{}[App.tsx]
 import { useEffect, useMemo, useState } from "react";
 
 type ThemeStyle = {
