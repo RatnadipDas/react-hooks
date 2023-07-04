@@ -64,7 +64,7 @@ useEffect(setup, dependencies?)
 ### Example
 
 In the following example of React app, we have created a timer using `useEffect` Hook.
-`useEffect` Hook takes a setup function with our Effect logic which can returns a cleanup function, and this cleanup function is called when this `useEffect` hook is called the next time our component gets unmounted. `useEffect` Hook also takes dependencies inside the dependency array. If there are no dependencies inside of the dependency array, then the `useEffect` is called at the time of the component mounting and the cleanup function is called at the time of the component unmounting. If there are dependencies inside of the dependency array, then `useEffect` is run at the time of component mounting, and whenever the dependencies change, first the cleanup function is called, and then the logic present inside the `useEffect` is run. The cleanup also runs just before the unmounting of the component.
+`useEffect` Hook takes a setup function with our Effect logic which can returns a cleanup function, and this cleanup function is called when this `useEffect` hook is called the next time our component gets unmounted. `useEffect` Hook also takes dependencies inside the dependency array. If there are no dependencies inside of the dependency array, then the `useEffect` is called at the time of the component mounting and the cleanup function is called at the time of the component unmounting. If there are dependencies inside of the dependency array, then `useEffect` is run at the time of component mounting, and whenever the dependencies change, first the cleanup function is called, and then the logic present inside the `useEffect` is run. The cleanup also runs just before the unmounting of the component. Also, `useEffect` Hooks with no dependency arrays will run the cleanup function and subsequently, the `useEffect` logic on every re-render of the application.
 ```tsx
 import { useEffect, useState } from "react";
 
@@ -106,6 +106,76 @@ const App = () => {
 export default App;
 ```
 
+## [`useRef`](https://react.dev/reference/react/useRef) Hook
+
+`useRef` is a React Hook that lets you reference a value that’s not needed for rendering.
+
+```tsx
+const ref = useRef(initialValue)
+```
+
+### Example
+
+The app below counts the number of times the app rendered using `useRef` Hook.
+
+```tsx
+import { useState, useEffect, useRef } from "react";
+
+const App = () => {
+  const [name, setName] = useState<string>("");
+  const renderCount = useRef<number>(2); // in strict mode of React v18 on first run app renders 2 times
+
+  useEffect(() => {
+    renderCount.current++;
+  });
+
+  return (
+    <>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <div>My name is {name}</div>
+      <div>I rendered {renderCount.current} time</div>
+    </>
+  );
+};
+
+export default App;
+```
+
+People mostly use `useRef` Hooks to reference the HTML elements inside of the `JSX/TSX`:
+
+```tsx
+import { useState, useRef } from "react";
+
+const App = () => {
+  const [name, setName] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFocus = () => {
+    inputRef.current?.focus();
+  };
+
+  return (
+    <>
+      <input
+        ref={inputRef}
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <div>My name is {name}</div>
+      <button onClick={handleFocus}>Focus</button>
+    </>
+  );
+};
+
+export default App;
+```
+
+
 ## [`useLayoutEffect`](https://react.dev/reference/react/useLayoutEffect) Hook
 useLayoutEffect is a version of useEffect that fires before the browser repaints the screen.
 
@@ -114,22 +184,30 @@ useLayoutEffect(setup, dependencies?)
 ```
 
 ### Example
+
 ```tsx
-import { useLayoutEffect, useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 
 const App = () => {
-  const [count, setCount] = useState<number>(0);
-  const [msg, setMsg] = useState<string>("");
-
+  const [show, setShow] = useState<boolean>(false);
+  const popup = useRef<HTMLDivElement>(null);
+  const button = useRef<HTMLButtonElement>(null);
   useLayoutEffect(() => {
-    setMsg(`${"👋".repeat(count)} Hi!`);
-  }, [count]);
+    if (!(popup.current && button.current)) return;
 
+    const { bottom } = button.current.getBoundingClientRect();
+    popup.current.style.top = `${bottom + 25}px`;
+  }, [show]);
   return (
     <>
-      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
-      <div>{count}</div>
-      <div>{msg}</div>
+      <button ref={button} onClick={() => setShow((s) => !s)}>
+        Click Here
+      </button>
+      {show ? (
+        <div ref={popup} style={{ position: "relative" }}>
+          This is a popup
+        </div>
+      ) : null}
     </>
   );
 };
