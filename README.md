@@ -57,6 +57,10 @@ export default App;
 
 `useEffect` Hook lets you synchronize a component with an external system.
 
+```tsx
+useEffect(setup, dependencies?)
+```
+
 ### Example
 
 In the following example of React app, we have created a timer using `useEffect` Hook.
@@ -96,6 +100,37 @@ const App = () => {
         <span>{hour}</span> : <span>{minute}</span> : <span>{second}</span>
       </h1>
     </div>
+  );
+};
+
+export default App;
+```
+
+## [`useLayoutEffect`](https://react.dev/reference/react/useLayoutEffect) Hook
+useLayoutEffect is a version of useEffect that fires before the browser repaints the screen.
+
+```tsx
+useLayoutEffect(setup, dependencies?)
+```
+
+### Example
+```tsx
+import { useLayoutEffect, useState } from "react";
+
+const App = () => {
+  const [count, setCount] = useState<number>(0);
+  const [msg, setMsg] = useState<string>("");
+
+  useLayoutEffect(() => {
+    setMsg(`${"👋".repeat(count)} Hi!`);
+  }, [count]);
+
+  return (
+    <>
+      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+      <div>{count}</div>
+      <div>{msg}</div>
+    </>
   );
 };
 
