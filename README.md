@@ -269,9 +269,9 @@ const List = ({ getItems }: Props) => {
 export default List;
 ```
 
-Problem with above code is when we change the theme using `useState`, inside `App` component it triggers the re-rendering of the whole app. As a result the reference of the `getItems` function changes and change in reference of the `getItems` triggers the `useEffect` in the `List` component.
+The problem with the above code is when we change the theme using `useState` inside `App` component, it triggers the re-rendering of the whole app. As a result, the reference of the `getItems` function changes and a change in reference of the `getItems` triggers the `useEffect` in the `List` component.
 
-To get ride of the above problem we can wap function definition of `getItems` inside the `useCallback` Hook with `number` inside the dependency array of the `useCallback`. Now, if value of the `number` variable doesn't change cached function definition for `getItems` with be used, which solves our problem.
+To get rid of the above problem, we can wrap function definition of `getItems` inside the `useCallback` Hook with `number` inside the dependency array of the `useCallback`. Now, if the value of the `number` variable doesn't change cached function definition for `getItems` with be used, which solves our problem.
 
 ```tsx
 import { useCallback, useState } from "react";
