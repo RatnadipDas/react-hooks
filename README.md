@@ -22,7 +22,7 @@ type ThemeStyle = {
 };
 
 
-function App() {
+const App = () => {
   const [number, setNumber] = useState<number>(0);
   const [dark, setDark] = useState<boolean>(false);
   const resultedNumber = slowFunction(number);
@@ -68,7 +68,7 @@ type ThemeStyle = {
   color: string;
 };
 
-function App() {
+const App = () => {
   const [number, setNumber] = useState<number>(0);
   const [dark, setDark] = useState<boolean>(false);
   const resultedNumber = useMemo<number>(() => slowFunction(number), [number]);
@@ -114,7 +114,7 @@ type ThemeStyle = {
   color: string;
 };
 
-function App() {
+const App = () => {
   const [number, setNumber] = useState<number>(0);
   const [dark, setDark] = useState<boolean>(false);
   const resultedNumber = useMemo<number>(() => slowFunction(number), [number]);
@@ -164,7 +164,7 @@ type ThemeStyle = {
   color: string;
 };
 
-function App() {
+const App = () => {
   const [number, setNumber] = useState<number>(0);
   const [dark, setDark] = useState<boolean>(false);
   const resultedNumber = useMemo<number>(() => slowFunction(number), [number]);
