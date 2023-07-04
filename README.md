@@ -1,15 +1,13 @@
 # React Hooks
 
-## Builtin Hooks
-
-### [`useState`](https://react.dev/reference/react/useState) Hook
+## [`useState`](https://react.dev/reference/react/useState) Hook
 `useState` Hook lets you add a state variable to your component.
 
 ```tsx
 const [state, setState] = useState(initialState);
 ```
 
-#### Example
+### Example
 
 In the following React app, we have created three states with `useState` Hook. `useState` Hook returns us a variable which stores the current state (in the example code `number, inputName, names`) and a setter function which has a callback function which can accept current state as a parameter and return the new state (in the example code `setNumber, setInputName, setNames`), we can also change the current state without using the callback function by passing the new state in the setter function directly. Every time we set a new state using the setter function, React's virtual DOM re-renders the whole component.
 ```tsx
@@ -56,13 +54,13 @@ export default App;
 ```
 
 
-### [`useMemo`](https://react.dev/reference/react/useMemo) Hook
+## [`useMemo`](https://react.dev/reference/react/useMemo) Hook
 `useMemo` Hook lets you cache the result of a calculation between re-renders.
 ```tsx
 const cachedValue = useMemo(calculateValue, dependencies)
 ```
 
-#### Example
+### Example
 Consider the following react code:
 
 ```tsx
@@ -259,14 +257,14 @@ const slowFunction = (num: number) => {
 export default App;
 ```
 
-### [`useCallback`](https://react.dev/reference/react/useCallback) Hook
+## [`useCallback`](https://react.dev/reference/react/useCallback) Hook
 `useCallback` Hook lets you cache a function definition between re-renders.
 
 ```tsx
 const cachedFn = useCallback(fn, dependencies)
 ```
 
-#### Example
+### Example
 Consider the `App` component and `List` component:
 
 ```tsx
