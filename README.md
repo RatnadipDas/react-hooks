@@ -2,6 +2,8 @@
 
 ## Builtin Hooks
 
+{include} ./Test.md
+
 ### [`useMemo`](https://react.dev/reference/react/useMemo) Hook
 `useMemo` Hook lets you cache the result of a calculation between re-renders.
 ```tsx
@@ -14,11 +16,17 @@ Consider the following react code:
 ```tsx
 import { useMemo, useState } from "react";
 
+type ThemeStyle = {
+  backgroundColor: string;
+  color: string;
+};
+
+
 function App() {
   const [number, setNumber] = useState<number>(0);
   const [dark, setDark] = useState<boolean>(false);
   const resultedNumber = slowFunction(number);
-  const themeStyle = {
+  const themeStyle: ThemeStyle = {
     backgroundColor: dark ? "black" : "white",
     color: dark ? "white" : "black",
   };
@@ -55,11 +63,16 @@ Every time we change the theme of the application using `useState` Hook, it trig
 ```tsx
 import { useMemo, useState } from "react";
 
+type ThemeStyle = {
+  backgroundColor: string;
+  color: string;
+};
+
 function App() {
   const [number, setNumber] = useState<number>(0);
   const [dark, setDark] = useState<boolean>(false);
   const resultedNumber = useMemo<number>(() => slowFunction(number), [number]);
-  const themeStyle = {
+  const themeStyle: ThemeStyle = {
     backgroundColor: dark ? "black" : "white",
     color: dark ? "white" : "black",
   };
