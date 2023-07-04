@@ -58,7 +58,7 @@ import { useMemo, useState } from "react";
 function App() {
   const [number, setNumber] = useState<number>(0);
   const [dark, setDark] = useState<boolean>(false);
-  const resultedNumber = useMemo(() => slowFunction(number), [number]);
+  const resultedNumber = useMemo<number>(() => slowFunction(number), [number]);
   const themeStyle = {
     backgroundColor: dark ? "black" : "white",
     color: dark ? "white" : "black",
@@ -75,7 +75,7 @@ function App() {
         Change Theme
       </button>
       <div style={themeStyle}>{resultedNumber}</div>
-    </>
+    </number>
   );
 }
 
