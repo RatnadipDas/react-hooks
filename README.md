@@ -53,6 +53,49 @@ const App = () => {
 export default App;
 ```
 
+## [`useEffect`](https://react.dev/reference/react/useEffect)
+`useEffect` Hook lets you synchronize a component with an external system.
+
+### Example
+
+In the following example of React app, we have created a timer using `useEffect` Hook.
+`useEffect` Hook takes a setup function with our Effect logic which can returns a cleanup function, and this cleanup function is called when this `useEffect` hook is called the next time our component gets unmounted. `useEffect` Hook also takes dependencies inside the dependency array. If there are no dependencies inside of the dependency array, then the `useEffect` is called at the time of the component mounting and the cleanup function is called at the time of the component unmounting. If there are dependencies inside of the dependency array, then `useEffect` is run at the time of component mounting, and whenever the dependencies change, first the cleanup function is called, and then the logic present inside the `useEffect` is run. The cleanup also runs just before the unmounting of the component.
+```tsx
+import { useEffect, useState } from "react";
+
+const Clock = () => {
+  const [current, setCurrent] = useState<Date>(new Date());
+  const [hour, setHour] = useState<number>(current.getHours());
+  const [minute, setMinute] = useState<number>(current.getMinutes());
+  const [second, setSecond] = useState<number>(current.getSeconds());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent(new Date());
+    }, 1000);
+
+    return () => {clearInterval(interval)};
+  }, []);
+
+  useEffect(() => {
+    setHour(current.getHours());
+    setMinute(current.getMinutes());
+    setSecond(current.getSeconds());
+
+    return () => {console.log("Cleanup function is called");}
+  }, [current]);
+
+  return (
+    <div>
+      <h1>
+        <span>{hour}</span> : <span>{minute}</span> : <span>{second}</span>
+      </h1>
+    </div>
+  );
+};
+
+export default Clock;
+```
 
 ## [`useMemo`](https://react.dev/reference/react/useMemo) Hook
 `useMemo` Hook lets you cache the result of a calculation between re-renders.
