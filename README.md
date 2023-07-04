@@ -53,7 +53,8 @@ const App = () => {
 export default App;
 ```
 
-## [`useEffect`](https://react.dev/reference/react/useEffect)
+## [`useEffect`](https://react.dev/reference/react/useEffect) Hook
+
 `useEffect` Hook lets you synchronize a component with an external system.
 
 ### Example
@@ -63,7 +64,7 @@ In the following example of React app, we have created a timer using `useEffect`
 ```tsx
 import { useEffect, useState } from "react";
 
-const Clock = () => {
+const App = () => {
   const [current, setCurrent] = useState<Date>(new Date());
   const [hour, setHour] = useState<number>(current.getHours());
   const [minute, setMinute] = useState<number>(current.getMinutes());
@@ -74,7 +75,9 @@ const Clock = () => {
       setCurrent(new Date());
     }, 1000);
 
-    return () => {clearInterval(interval)};
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
@@ -82,7 +85,9 @@ const Clock = () => {
     setMinute(current.getMinutes());
     setSecond(current.getSeconds());
 
-    return () => {console.log("Cleanup function is called");}
+    return () => {
+      console.log("Cleanup function is called");
+    };
   }, [current]);
 
   return (
@@ -94,7 +99,7 @@ const Clock = () => {
   );
 };
 
-export default Clock;
+export default App;
 ```
 
 ## [`useMemo`](https://react.dev/reference/react/useMemo) Hook
