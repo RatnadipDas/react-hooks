@@ -204,3 +204,125 @@ const slowFunction = (num: number) => {
 
 export default App;
 ```
+
+### [`useCallback`](https://react.dev/reference/react/useCallback) Hook
+`useCallback` Hook lets you cache a function definition between re-renders.
+
+```tsx
+const cachedFn = useCallback(fn, dependencies)
+```
+
+#### Example
+Consider the `App` component and `List` component:
+
+```tsx
+import { useCallback, useState } from "react";
+import List from "./components/List";
+
+const App = () => {
+  const [number, setNumber] = useState<number>(0);
+  const [dark, setDark] = useState<boolean>(false);
+  const getItems = (incrementor: number) => {
+    return [number + incrementor, number + incrementor + 1, number + incrementor + 2];
+  };
+
+  const theme = {
+    backgroundColor: dark ? "#333" : "#fff",
+    color: dark ? "#fff" : "#333",
+  };
+
+  return (
+    <div style={theme}>
+      <input
+        type="number"
+        value={number}
+        onChange={(e) => setNumber(parseInt(e.target.value))}
+      />
+      <button onClick={() => setDark((prevDark) => !prevDark)}>
+        Change Theme
+      </button>
+      <List getItems={getItems} />
+    </div>
+  );
+};
+
+export default App;
+```
+
+```tsx
+import { useEffect, useState } from "react";
+
+type Props = {
+  getItems: (incrementor: number) => number[];
+};
+
+const List = ({ getItems }: Props) => {
+  const [items, setItems] = useState<number[]>([]);
+  useEffect(() => {
+    setItems(getItems(5));
+    console.log("Updating items...");
+  }, [getItems]);
+
+  return items.map((item) => <div key={item}>{item}</div>);
+};
+
+export default List;
+```
+
+Problem with above code is when we change the theme using `useState`, inside `App` component it triggers the re-rendering of the whole app. As a result the reference of the `getItems` function changes and change in reference of the `getItems` triggers the `useEffect` in the `List` component.
+
+To get ride of the above problem we can wap function definition of `getItems` inside the `useCallback` Hook with `number` inside the dependency array of the `useCallback`. Now, if value of the `number` variable doesn't change cached function definition for `getItems` with be used, which solves our problem.
+
+```tsx
+import { useCallback, useState } from "react";
+import List from "./components/List";
+
+const App = () => {
+  const [number, setNumber] = useState<number>(0);
+  const [dark, setDark] = useState<boolean>(false);
+  const getItems = useCallback<(incrementor: number) => number[]>(
+    return [number + incrementor, number + incrementor + 1, number + incrementor + 2];
+  }, [number]);
+
+  const theme = {
+    backgroundColor: dark ? "#333" : "#fff",
+    color: dark ? "#fff" : "#333",
+  };
+
+  return (
+    <div style={theme}>
+      <input
+        type="number"
+        value={number}
+        onChange={(e) => setNumber(parseInt(e.target.value))}
+      />
+      <button onClick={() => setDark((prevDark) => !prevDark)}>
+        Change Theme
+      </button>
+      <List getItems={getItems} />
+    </div>
+  );
+};
+
+export default App;
+```
+
+```tsx
+import { useEffect, useState } from "react";
+
+type Props = {
+  getItems: (incrementor: number) => number[];
+};
+
+const List = ({ getItems }: Props) => {
+  const [items, setItems] = useState<number[]>([]);
+  useEffect(() => {
+    setItems(getItems(5));
+    console.log("Updating items...");
+  }, [getItems]);
+
+  return items.map((item) => <div key={item}>{item}</div>);
+};
+
+export default List;
+```
