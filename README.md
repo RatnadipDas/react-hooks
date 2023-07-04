@@ -2,6 +2,60 @@
 
 ## Builtin Hooks
 
+### [`useState`](https://react.dev/reference/react/useState) Hook
+`useState` Hook lets you add a state variable to your component.
+
+```tsx
+const [state, setState] = useState(initialState);
+```
+
+#### Example
+
+In the following React app, we have created three states with `useState` Hook. `useState` Hook returns us a variable which stores the current state (in the example code `number, inputName, names`) and a setter function which has a callback function which can accept current state as a parameter and return the new state (in the example code `setNumber, setInputName, setNames`), we can also change the current state without using the callback function by passing the new state in the setter function directly. Every time we set a new state using the setter function, React's virtual DOM re-renders the whole component.
+```tsx
+
+import { useState } from "react";
+
+const App = () => {
+  const [number, setNumber] = useState<number>(0);
+  const [inputName, setInputName] = useState<string>("");
+  const [names, setNames] = useState<string[]>([]);
+
+  const handleSubmit = () => {
+    setNames((prevNames) => [...prevNames, inputName]);
+    setInputName("");
+  };
+
+  return (
+    <>
+      <input
+        type="text"
+        value={inputName}
+        onChange={(event) => setInputName(event.target.value)}
+      />
+      <button onClick={handleSubmit}>Submit</button>
+      <br />
+      <ul>
+        {names.map((name) => (
+          <li key={name}>{name}</li>
+        ))}
+      </ul>
+      <br />
+      <button onClick={() => setNumber((prevNumber) => prevNumber - 1)}>
+        -
+      </button>
+      <span>{number}</span>
+      <button onClick={() => setNumber((prevNumber) => prevNumber + 1)}>
+        +
+      </button>
+    </>
+  );
+};
+
+export default App;
+```
+
+
 ### [`useMemo`](https://react.dev/reference/react/useMemo) Hook
 `useMemo` Hook lets you cache the result of a calculation between re-renders.
 ```tsx
