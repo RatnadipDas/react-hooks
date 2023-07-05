@@ -536,7 +536,7 @@ const List = ({ getItems }: Props) => {
 export default List;
 ```
 
-## `useContext` Hook
+## [`useContext`](https://react.dev/reference/react/useContext) Hook
 
 `useContext` Hook lets you read and subscribe to context from your component.
 
