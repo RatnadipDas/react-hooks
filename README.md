@@ -8,7 +8,6 @@ const [state, setState] = useState(initialState);
 ```
 
 ### Example
-
 In the following React app, we have created three states with `useState` Hook. `useState` Hook returns us a variable which stores the current state (in the example code `number, inputName, names`) and a setter function which has a callback function which can accept current state as a parameter and return the new state (in the example code `setNumber, setInputName, setNames`), we can also change the current state without using the callback function by passing the new state in the setter function directly. Every time we set a new state using the setter function, React's virtual DOM re-renders the whole component.
 ```tsx
 
@@ -62,7 +61,6 @@ useEffect(setup, dependencies?)
 ```
 
 ### Example
-
 In the following example of React app, we have created a timer using `useEffect` Hook.
 `useEffect` Hook takes a setup function with our Effect logic which can returns a cleanup function, and this cleanup function is called when this `useEffect` hook is called the next time our component gets unmounted. `useEffect` Hook also takes dependencies inside the dependency array. If there are no dependencies inside of the dependency array, then the `useEffect` is called at the time of the component mounting and the cleanup function is called at the time of the component unmounting. If there are dependencies inside of the dependency array, then `useEffect` is run at the time of component mounting, and whenever the dependencies change, first the cleanup function is called, and then the logic present inside the `useEffect` is run. The cleanup also runs just before the unmounting of the component. Also, `useEffect` Hooks with no dependency arrays will run the cleanup function and subsequently, the `useEffect` logic on every re-render of the application.
 ```tsx
@@ -115,7 +113,6 @@ const ref = useRef(initialValue)
 ```
 
 ### Example
-
 The app below counts the number of times the app rendered using `useRef` Hook.
 
 ```tsx
@@ -184,7 +181,6 @@ useLayoutEffect(setup, dependencies?)
 ```
 
 ### Example
-
 ```tsx
 import { useState, useRef, useLayoutEffect } from "react";
 
@@ -538,4 +534,118 @@ const List = ({ getItems }: Props) => {
 };
 
 export default List;
+```
+
+## `useContext` Hook
+
+`useContext` Hook lets you read and subscribe to context from your component.
+
+```tsx
+const value = useContext(SomeContext)
+```
+
+### Example
+The app below describes an use case of `useContext` Hook. We will use `useContext` to provide global theme, getter method to get the current theme mode and setter method to change the current theme mode.
+
+First inside the `Context` folder we will crate there files namely: `theme.d.ts, themeContext.ts, ThemeState.tsx`.
+
+Contents of `theme.d.ts` file:
+```tsx
+export type Theme = "DARK" | "LIGHT";
+export type ThemeStyle = {
+  color: string;
+  backgroundColor: string;
+};
+```
+
+Contents of `themeContext.ts` file:
+```tsx
+import { createContext, Dispatch, SetStateAction } from "react";
+import { Theme, ThemeStyle } from "./theme";
+
+type ThemeContextType = {
+  theme: Theme;
+  themeStyle: ThemeStyle;
+  setTheme: Dispatch<SetStateAction<Theme>>;
+};
+
+const themeContext = createContext<ThemeContextType>({
+  theme: "LIGHT",
+  themeStyle: {
+    color: "#333",
+    backgroundColor: "#fff",
+  },
+  setTheme: () => {
+    return;
+  },
+});
+
+export default themeContext;
+```
+
+Contents of `ThemeState.tsx` file:
+```tsx
+import { PropsWithChildren, useState } from "react";
+import ThemeContext from "./themeContext";
+import { Theme } from "./theme";
+
+const ThemeState = ({ children }: PropsWithChildren) => {
+  const [theme, setTheme] = useState<Theme>("DARK");
+  const themeStyle = {
+    color: theme === "DARK" ? "#fff" : "#333",
+    backgroundColor: theme === "DARK" ? "#333" : "#fff",
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, themeStyle, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export default ThemeState;
+```
+
+Now, we add following code to the `main.tsx` or 'index.tsx file:
+```tsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import ThemeState from "./Context/ThemeState.tsx";
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>
+    <ThemeState>
+      <App />
+    </ThemeState>
+  </React.StrictMode>
+);
+```
+
+And then will write codes for our main app logic inside `App.tsx` file:
+```tsx
+import { useContext } from "react";
+import themeContext from "./Context/themeContext";
+
+const App = () => {
+  const { theme, themeStyle, setTheme } = useContext(themeContext);
+  const handleToggleTheme = () => {
+    if (theme === "DARK") {
+      setTheme("LIGHT");
+    } else {
+      setTheme("DARK");
+    }
+  };
+
+  return (
+    <div style={themeStyle}>
+      <button onClick={handleToggleTheme}>Toggle Theme</button>
+      <h1>Current theme style is {theme}</h1>
+      <p>This React app shows the application of createContext Hook</p>
+    </div>
+  );
+};
+
+export default App;
 ```
