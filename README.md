@@ -606,7 +606,7 @@ const ThemeState = ({ children }: PropsWithChildren) => {
 export default ThemeState;
 ```
 
-Now, we add following code to the `main.tsx` or 'index.tsx file:
+Now, we add following code to the `main.tsx` or `index.tsx` file:
 ```tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -644,6 +644,110 @@ const App = () => {
       <h1>Current theme style is {theme}</h1>
       <p>This React app shows the application of createContext Hook</p>
     </div>
+  );
+};
+
+export default App;
+```
+
+## [`useReducer`](https://react.dev/reference/react/useReducer) Hook
+`useReducer` Hook lets you add a reducer to your component.
+
+```tsx
+const [state, dispatch] = useReducer(reducer, initialArg, init?)
+```
+
+### Example
+Example code for `useReducer` Hook is given below:
+
+```tsx
+import { useReducer, useState } from "react";
+
+type State = {
+  count: number;
+  text: string;
+};
+
+type Payload = {
+  nextChange?: number;
+  nextText?: string;
+};
+
+const enum REDUCER_ACTION_TYPE {
+  INCREMENT,
+  DECREMENT,
+  NEW_TEXT,
+}
+
+type ReducerAction = {
+  type: REDUCER_ACTION_TYPE;
+  payload: Payload;
+};
+
+const reducer = (state: State, action: ReducerAction): State => {
+  switch (action.type) {
+    case REDUCER_ACTION_TYPE.DECREMENT:
+      return {
+        ...state,
+        count: state.count - (action.payload.nextChange ?? 0),
+      };
+    case REDUCER_ACTION_TYPE.INCREMENT:
+      return {
+        ...state,
+        count: state.count + (action.payload.nextChange ?? 0),
+      };
+    case REDUCER_ACTION_TYPE.NEW_TEXT:
+      return { ...state, text: action.payload.nextText ?? "" };
+    default:
+      throw new Error();
+  }
+};
+
+const initialState: State = { count: 0, text: "" };
+
+const App = () => {
+  // with optional initializer function
+  const [state, dispatch] = useReducer(reducer, initialState, (state) => ({
+    ...state,
+    count: 1000,
+  }));
+  const [text, setText] = useState<string>("");
+
+  const increment = () => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.INCREMENT,
+      payload: { nextChange: 2 },
+    });
+  };
+  const decrement = () => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.DECREMENT,
+      payload: { nextChange: 2 },
+    });
+  };
+  const handleInput = () => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.NEW_TEXT,
+      payload: { nextText: text },
+    });
+    setText("");
+  };
+
+  return (
+    <>
+      <h1>
+        {state.count} {state.text}
+      </h1>
+      <button onClick={increment}>+</button>
+      <button onClick={decrement}>-</button>
+      <br />
+      <input
+        type="text"
+        value={text}
+        onChange={(event) => setText(event.target.value)}
+      />
+      <button onClick={handleInput}>Change Name</button>
+    </>
   );
 };
 
