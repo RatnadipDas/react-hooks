@@ -1032,7 +1032,7 @@ The`useTransition` Hook that lets you update the state without blocking the UI.
 const [isPending, startTransition] = useTransition();
 ```
 
-## Example
+### Example
 In the application code shown below, when we type inside of the text input, the typed characters are not shown immediately because of the long for-loop overhead.
 
 ```tsx
@@ -1105,6 +1105,89 @@ const App = () => {
       ) : (
         list.map((item, index) => <div key={index}>{item}</div>)
       )}
+    </>
+  );
+};
+
+export default App;
+```
+
+## [`useDeferredValue`](https://react.dev/reference/react/useDeferredValue)
+The `useDeferredValue` Hook that lets you defer updating a part of the UI.
+
+```ts
+const deferredValue = useDeferredValue(value);
+```
+
+### Example
+In the application code shown below, when we type inside of the text input, the typed characters are not shown immediately because of the long for-loop overhead.
+
+```tsx
+import { ChangeEvent, useEffect, useState } from "react";
+
+const App = () => {
+  const [input, setInput] = useState<string>("");
+  const [list, setList] = useState<string[]>([]);
+
+  useEffect(() => {
+    const LIST_SIZE = 20_000;
+    const l: string[] = [];
+
+    for (let i = 0; i < LIST_SIZE; i++) {
+      l.push(input);
+    }
+
+    setList(l);
+  }, [input]);
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  return (
+    <>
+      <input type="text" value={input} onChange={handleInput} />
+      {list.map((item, index) => (
+        <div key={index}>{item}</div>
+      ))}
+    </>
+  );
+};
+
+export default App;
+```
+
+This application can be fixed using the `useDeferredValue` Hook as shown below:
+```tsx
+import { ChangeEvent, useDeferredValue, useEffect, useState } from "react";
+
+const App = () => {
+  const [input, setInput] = useState<string>("");
+  const [list, setList] = useState<string[]>([]);
+  const deferredInput = useDeferredValue(input);
+
+  const LIST_SIZE = 20_000;
+
+  useEffect(() => {
+    const l: string[] = [];
+
+    for (let i = 0; i < LIST_SIZE; i++) {
+      l.push(deferredInput);
+    }
+
+    setList(l);
+  }, [deferredInput]);
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  return (
+    <>
+      <input type="text" value={input} onChange={handleInput} />
+      {list.map((item, index) => (
+        <div key={index}>{item}</div>
+      ))}
     </>
   );
 };
