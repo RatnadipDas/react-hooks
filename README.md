@@ -1243,7 +1243,7 @@ export default App;
 
 ## Building a custom hook called `useLocalStorage`
 
-Our custom hook the `useLocalStorage` hook saves and retrieves value from local storage. Implementation and example usage of this hook is given below:
+Our custom hook the `useLocalStorage` hook saves and retrieves value from local storage. The implementation and and example usage of this hook is given below:
 
 ```tsx
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
