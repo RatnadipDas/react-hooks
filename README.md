@@ -1033,3 +1033,81 @@ const [isPending, startTransition] = useTransition();
 ```
 
 ## Example
+In the application code shown below, when we type inside of the text input, the typed characters are not shown immediately because of the long for-loop overhead.
+
+```tsx
+import { ChangeEvent, useEffect, useState } from "react";
+
+const App = () => {
+  const [input, setInput] = useState<string>("");
+  const [list, setList] = useState<string[]>([]);
+
+  useEffect(() => {
+    const LIST_SIZE = 20_000;
+    const l: string[] = [];
+
+    for (let i = 0; i < LIST_SIZE; i++) {
+      l.push(input);
+    }
+
+    setList(l);
+  }, [input]);
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  return (
+    <>
+      <input type="text" value={input} onChange={handleInput} />
+      {list.map((item, index) => (
+        <div key={index}>{item}</div>
+      ))}
+    </>
+  );
+};
+
+export default App;
+```
+
+This application can be fixed using the `useTransition` Hook as shown below:
+```tsx
+import { ChangeEvent, useEffect, useState, useTransition } from "react";
+
+const App = () => {
+  const [input, setInput] = useState<string>("");
+  const [list, setList] = useState<string[]>([]);
+  const [isPending, startTransition] = useTransition();
+
+  const LIST_SIZE = 20_000;
+
+  useEffect(() => {
+    startTransition(() => {
+      const l: string[] = [];
+
+      for (let i = 0; i < LIST_SIZE; i++) {
+        l.push(input);
+      }
+
+      setList(l);
+    });
+  }, [input]);
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
+  return (
+    <>
+      <input type="text" value={input} onChange={handleInput} />
+      {isPending ? (
+        <h1>Loading...</h1>
+      ) : (
+        list.map((item, index) => <div key={index}>{item}</div>)
+      )}
+    </>
+  );
+};
+
+export default App;
+```
