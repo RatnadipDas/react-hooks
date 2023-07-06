@@ -1194,3 +1194,111 @@ const App = () => {
 
 export default App;
 ```
+
+## [`useId`](https://react.dev/reference/react/useId)
+The `useId` Hook for generating unique IDs that can be passed to accessibility attributes.
+
+```tsx
+const id = useId()
+```
+
+### Example
+```tsx
+import { useId } from "react";
+
+const EmailInput = () => {
+  const id = useId();
+  return (
+    <>
+      <label htmlFor={id}>Email</label>
+      <input type="email" id={id} />
+    </>
+  );
+};
+
+export default EmailInput;
+```
+
+```tsx
+import EmailInput from "./components/EmailInput"
+
+const App = () => {
+  return (
+    <>
+      {/* Both of the EmailInput has different ids */}
+      <EmailInput />
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia
+        aspernatur earum delectus quibusdam nesciunt aliquam dicta rerum
+        facilis. Eaque illum asperiores explicabo, necessitatibus doloribus
+        excepturi sapiente aliquam porro iusto cum.
+      </p>
+      <EmailInput />
+    </>
+  );
+};
+
+export default App;
+```
+
+## Building a custom hook called `useLocalStorage`
+
+Our custom hook the `useLocalStorage` hook saves and retrieves value from local storage. Implementation and example usage of this hook is given below:
+
+```tsx
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+const getSavedValue = <T>(key: string, initialValue: T | (() => T)): T => {
+  const savedValue: T | null = JSON.parse(localStorage.getItem(key) || "null");
+  if (savedValue) return savedValue;
+
+  if (initialValue instanceof Function) return initialValue();
+
+  return initialValue;
+};
+
+const useLocalStorage = <T>(
+  key: string,
+  initialValue: T
+): Readonly<[T, Dispatch<SetStateAction<T>>]> => {
+  const [value, setValue] = useState<T>(() =>
+    getSavedValue<T>(key, initialValue)
+  );
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+};
+
+export default useLocalStorage;
+```
+
+## Example
+```tsx
+import { useEffect, useState } from "react";
+import useLocalStorage from "./hooks/useLocalStorage";
+
+const App = () => {
+  const [name, setName] = useState<string>("");
+  const [saveName, setSaveName] = useLocalStorage<string>("name", name);
+
+  useEffect(() => {
+    setSaveName(name);
+  }, [name, setSaveName]);
+
+  return (
+    <>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <h1>{saveName}</h1>
+    </>
+  );
+};
+
+export default App;
+```
