@@ -1,7 +1,7 @@
 # React Hooks
 
 ## [`useState`](https://react.dev/reference/react/useState) Hook
-`useState` Hook lets you add a state variable to your component.
+The `useState` Hook lets you add a state variable to your component.
 
 ```tsx
 const [state, setState] = useState(initialState);
@@ -54,10 +54,10 @@ export default App;
 
 ## [`useEffect`](https://react.dev/reference/react/useEffect) Hook
 
-`useEffect` Hook lets you synchronize a component with an external system.
+The `useEffect` Hook lets you synchronize a component with an external system.
 
 ```tsx
-useEffect(setup, dependencies?)
+useEffect(setup, dependencies?);
 ```
 
 ### Example
@@ -106,14 +106,14 @@ export default App;
 
 ## [`useRef`](https://react.dev/reference/react/useRef) Hook
 
-`useRef` is a React Hook that lets you reference a value that’s not needed for rendering.
+The `useRef` is a React Hook that lets you reference a value that’s not needed for rendering.
 
 ```tsx
-const ref = useRef(initialValue)
+const ref = useRef(initialValue);
 ```
 
 ### Example
-The app below counts the number of times the app rendered using `useRef` Hook.
+The app below counts the number of times the app gets rendered using the `useRef` Hook.
 
 ```tsx
 import { useState, useEffect, useRef } from "react";
@@ -142,7 +142,7 @@ const App = () => {
 export default App;
 ```
 
-People mostly use `useRef` Hooks to reference the HTML elements inside of the `JSX/TSX`:
+People mostly use the `useRef` Hooks to reference the HTML elements inside of the `JSX/TSX`:
 
 ```tsx
 import { useState, useRef } from "react";
@@ -174,10 +174,10 @@ export default App;
 
 
 ## [`useLayoutEffect`](https://react.dev/reference/react/useLayoutEffect) Hook
-useLayoutEffect is a version of useEffect that fires before the browser repaints the screen.
+The `useLayoutEffect` is a version of useEffect that fires before the browser repaints the screen.
 
 ```tsx
-useLayoutEffect(setup, dependencies?)
+useLayoutEffect(setup, dependencies?);
 ```
 
 ### Example
@@ -212,9 +212,9 @@ export default App;
 ```
 
 ## [`useMemo`](https://react.dev/reference/react/useMemo) Hook
-`useMemo` Hook lets you cache the result of a calculation between re-renders.
+The `useMemo` Hook lets you cache the result of a calculation between re-renders.
 ```tsx
-const cachedValue = useMemo(calculateValue, dependencies)
+const cachedValue = useMemo(calculateValue, dependencies);
 ```
 
 ### Example
@@ -361,7 +361,7 @@ const slowFunction = (num: number) => {
 export default App;
 ```
 
-But the problem is `useEffect` Hook with `themeStyle` will also run every time the `App` component re-renders because of the change of the reference of the `themeStyle`. To make sure that we only `console.log` message `"Theme has changed!"` when the actual value of the  `themeStyle` changes, not the reference, we can wrap the `themeStyle` inside `useMemo` Hook with `dark` inside the dependency array.
+But the problem is `useEffect` Hook with `themeStyle` will also run every time the `App` component re-renders because of the change of the reference of the `themeStyle`. To make sure that we only `console.log` message `"Theme has changed!"` when the actual value of the  `themeStyle` changes, not the reference, we can wrap the `themeStyle` inside the `useMemo` Hook with `dark` inside the dependency array.
 
 ```tsx
 import { useEffect, useMemo, useState } from "react";
@@ -415,10 +415,10 @@ export default App;
 ```
 
 ## [`useCallback`](https://react.dev/reference/react/useCallback) Hook
-`useCallback` Hook lets you cache a function definition between re-renders.
+The `useCallback` Hook lets you cache a function definition between re-renders.
 
 ```tsx
-const cachedFn = useCallback(fn, dependencies)
+const cachedFn = useCallback(fn, dependencies);
 ```
 
 ### Example
@@ -538,10 +538,10 @@ export default List;
 
 ## [`useContext`](https://react.dev/reference/react/useContext) Hook
 
-`useContext` Hook lets you read and subscribe to context from your component.
+The `useContext` Hook lets you read and subscribe to context from your component.
 
 ```tsx
-const value = useContext(SomeContext)
+const value = useContext(SomeContext);
 ```
 
 ### Example
@@ -558,7 +558,7 @@ export type ThemeStyle = {
 };
 ```
 
-Contents of `themeContext.ts` file:
+Contents of the `themeContext.ts` file:
 ```tsx
 import { createContext, Dispatch, SetStateAction } from "react";
 import { Theme, ThemeStyle } from "./theme";
@@ -583,7 +583,7 @@ const themeContext = createContext<ThemeContextType>({
 export default themeContext;
 ```
 
-Contents of `ThemeState.tsx` file:
+Contents of the `ThemeState.tsx` file:
 ```tsx
 import { PropsWithChildren, useState } from "react";
 import ThemeContext from "./themeContext";
@@ -606,7 +606,7 @@ const ThemeState = ({ children }: PropsWithChildren) => {
 export default ThemeState;
 ```
 
-Now, we add following code to the `main.tsx` or `index.tsx` file:
+Now, we add the following code to the `main.tsx` or `index.tsx` file:
 ```tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -623,7 +623,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 );
 ```
 
-And then will write codes for our main app logic inside `App.tsx` file:
+And then will write codes for our main app logic inside the `App.tsx` file:
 ```tsx
 import { useContext } from "react";
 import themeContext from "./Context/themeContext";
@@ -651,14 +651,14 @@ export default App;
 ```
 
 ## [`useReducer`](https://react.dev/reference/react/useReducer) Hook
-`useReducer` Hook lets you add a reducer to your component.
+The`useReducer` Hook lets you add a reducer to your component.
 
 ```tsx
-const [state, dispatch] = useReducer(reducer, initialArg, init?)
+const [state, dispatch] = useReducer(reducer, initialArg, init?);
 ```
 
 ### Example
-Example code for `useReducer` Hook is given below:
+Example code for the `useReducer` Hook is given below:
 
 ```tsx
 import { useReducer, useState } from "react";
@@ -756,10 +756,10 @@ export default App;
 
 ## [`useSyncExternalStore`](https://react.dev/reference/react/useSyncExternalStore) Hook
 
-`useSyncExternalStore` is a React Hook that lets you subscribe to an external store.
+The `useSyncExternalStore` is a React Hook that lets you subscribe to an external store.
 
 ```tsx
-const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)
+const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?);
 ```
 
 ### Example
@@ -804,7 +804,7 @@ const store: Store<State> = createStore<State>({
 export default store;
 ```
 
-Code for main app logic inside the file `App.tsx` is:
+Code for the main app logic inside the file `App.tsx` is:
 ```tsx
 import { useSyncExternalStore } from "react";
 import store, { State } from "./store/store";
@@ -856,3 +856,180 @@ const App = () => {
 
 export default App;
 ```
+
+## [`useImperativeHandle`](https://react.dev/reference/react/useImperativeHandle)
+The `useImperativeHandle` Hook lets you customize the handle exposed as a ref.
+
+```tsx
+useImperativeHandle(ref, createHandle, dependencies?);
+```
+
+### Example
+We can forward the `ref` in React by using the `forwardRef`as follows:
+
+Main application logic in the `App.tsx` file:
+```tsx
+import { useState, useRef } from "react";
+import CustomInput from "./components/CustomInput";
+
+const App = () => {
+  const [value, setValue] = useState<string>("red");
+  const inputRef = useRef<HTMLInputElement>(null);
+  return (
+    <>
+      <CustomInput
+        ref={inputRef}
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <br />
+      <button
+        onClick={() => {
+          if (!inputRef.current) return;
+          inputRef.current.focus();
+        }}
+      >
+        Focus
+      </button>
+    </>
+  );
+};
+
+export default App;
+```
+
+Our custom input code in the `CustomInput.tsx` file:
+```tsx
+import { CSSProperties, ChangeEvent, forwardRef } from "react";
+
+type Props = {
+  type: string;
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  style?: CSSProperties;
+};
+
+const CustomInput = forwardRef<HTMLInputElement, Props>(
+  ({ style, ...props }, ref) => {
+    return (
+      <input
+        ref={ref}
+        {...props}
+        style={{
+          border: "none",
+          backgroundColor: "lightpink",
+          padding: ".25em",
+          borderBottom: ".1em solid black",
+          borderTopRightRadius: ".25em",
+          borderTopLeftRadius: ".25em",
+          ...style,
+        }}
+      />
+    );
+  }
+);
+
+export default CustomInput;
+```
+
+Using `useImperativeHandle` to change the behavior of the forwarded `ref` as following:
+
+Changing behavior of forwarded ref inside the `CustomInput.tsx`, using the `useImperativeHandle` Hook:
+```tsx
+import {
+  CSSProperties,
+  ChangeEvent,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from "react";
+
+export type CustomInputRefType = {
+  alertValue: () => void;
+};
+
+type Props = {
+  type: string;
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  style?: CSSProperties;
+};
+
+const CustomInput = forwardRef<CustomInputRefType, Props>(
+  ({ style, ...props }, ref) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          alertValue: () => {
+            console.log(props.value);
+            inputRef.current?.focus();
+          },
+        };
+      },
+      [props.value]
+    );
+
+    return (
+      <input
+        ref={inputRef}
+        {...props}
+        style={{
+          border: "none",
+          backgroundColor: "lightpink",
+          padding: ".25em",
+          borderBottom: ".1em solid black",
+          borderTopRightRadius: ".25em",
+          borderTopLeftRadius: ".25em",
+          ...style,
+        }}
+      />
+    );
+  }
+);
+
+export default CustomInput;
+```
+
+Contents of the `App.tsx` file after using the `useImperativeHandle` Hook:
+```tsx
+import { useState, useRef } from "react";
+import CustomInput, { CustomInputRefType } from "./components/CustomInput";
+
+const App = () => {
+  const [value, setValue] = useState<string>("red");
+  const inputRef = useRef<CustomInputRefType>(null);
+  return (
+    <>
+      <CustomInput
+        ref={inputRef}
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <br />
+      <button
+        onClick={() => {
+          if (!inputRef.current) return;
+          inputRef.current.alertValue();
+        }}
+      >
+        Focus
+      </button>
+    </>
+  );
+};
+
+export default App;
+```
+
+## [`useTransition`](https://react.dev/reference/react/useTransition) Hook
+
+The`useTransition` Hook that lets you update the state without blocking the UI.
+```tsx
+const [isPending, startTransition] = useTransition();
+```
+
+## Example
