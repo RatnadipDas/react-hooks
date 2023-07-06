@@ -1275,7 +1275,7 @@ const useLocalStorage = <T>(
 export default useLocalStorage;
 ```
 
-## Example
+### Example
 ```tsx
 import { useEffect, useState } from "react";
 import useLocalStorage from "./hooks/useLocalStorage";
@@ -1301,4 +1301,68 @@ const App = () => {
 };
 
 export default App;
+```
+
+[`useDebugValue`](https://react.dev/reference/react/useDebugValue)
+
+The `useDebugValue` Hook lets you add a label to a custom Hook in React DevTools.
+
+```tsx
+useDebugValue(value, format?);
+```
+
+Example of `useDebugValue` for our `useLocalStorage` Hook is given below:
+
+### Example
+```tsx
+import {
+  Dispatch,
+  SetStateAction,
+  useDebugValue,
+  useEffect,
+  useState,
+} from "react";
+
+const getSavedValue = <T>(key: string, initialValue: T | (() => T)): T => {
+  const savedValue: T | null = JSON.parse(localStorage.getItem(key) || "null");
+  if (savedValue) return savedValue;
+
+  if (initialValue instanceof Function) return initialValue();
+
+  return initialValue;
+};
+
+const useLocalStorage = <T>(
+  key: string,
+  initialValue: T
+): Readonly<[T, Dispatch<SetStateAction<T>>]> => {
+  const [value, setValue] = useState<T>(() =>
+    getSavedValue<T>(key, initialValue)
+  );
+
+  // code: 1
+  // useDebugValue(key);
+  // useDebugValue(value);
+
+  // code: 2
+  // code 2 is same as code 1
+  // useDebugValue([key, value]);
+
+  // code: 3
+  // for some value that takes time, it will only go through this when we'll open React developer,s tool
+  useDebugValue(value, (v) => getValueSlowly(v));
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+};
+
+const getValueSlowly = <T>(value: T) => {
+  for (let i = 0; i < 3_000_000_000; i++) {}
+  return `This is value ${value}`;
+};
+
+export default useLocalStorage;
 ```
