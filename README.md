@@ -1303,7 +1303,7 @@ const App = () => {
 export default App;
 ```
 
-[`useDebugValue`](https://react.dev/reference/react/useDebugValue)
+[`useDebugValue`](https://react.dev/reference/react/useDebugValue) Hook
 
 The `useDebugValue` Hook lets you add a label to a custom Hook in React DevTools.
 
