@@ -753,3 +753,106 @@ const App = () => {
 
 export default App;
 ```
+
+## [`useSyncExternalStore`](https://react.dev/reference/react/useSyncExternalStore) Hook
+
+`useSyncExternalStore` is a React Hook that lets you subscribe to an external store.
+
+```tsx
+const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)
+```
+
+### Example
+Example code of `useSyncExternalStore` is given below:
+
+Code for external store inside the file `store.ts`:
+```tsx
+type Listener<T> = (currentState: T) => unknown;
+
+type Store<T> = {
+  getState: () => T;
+  setState: (newState: T) => void;
+  subscribe: (listener: Listener<T>) => () => boolean;
+};
+
+const createStore = <T>(initialState: T): Store<T> => {
+  let currentState = initialState;
+  const listeners: Set<Listener<T>> = new Set();
+  return {
+    getState: () => currentState,
+    setState: (newState: T) => {
+      currentState = newState;
+      listeners.forEach((listener) => listener(currentState));
+    },
+    subscribe: (listener) => {
+      listeners.add(listener);
+
+      return () => listeners.delete(listener);
+    },
+  };
+};
+
+export type State = {
+  [index: string]: number;
+};
+
+const store: Store<State> = createStore<State>({
+  value1: 0,
+  value2: 0,
+});
+
+export default store;
+```
+
+Code for main app logic inside the file `App.tsx` is:
+```tsx
+import { useSyncExternalStore } from "react";
+import store, { State } from "./store/store";
+
+const useStore = (selector: (state: State) => number) =>
+  useSyncExternalStore(store.subscribe, () => selector(store.getState()));
+
+const DisplayValue = ({ item }: { item: string }) => {
+  return (
+    <div>
+      {item}: {useStore((state) => state[item])}
+    </div>
+  );
+};
+
+const IncrementValue = ({ item }: { item: keyof State }) => {
+  return (
+    <button
+      onClick={() => {
+        const state = store.getState();
+        store.setState({
+          ...state,
+          [item]: state[item] + 1,
+        });
+      }}
+    >
+      Increment {item}
+    </button>
+  );
+};
+
+const App = () => {
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        maxWidth: 600,
+        gap: "1rem",
+      }}
+    >
+      <IncrementValue item="value1" />
+      <DisplayValue item="value1" />
+      <IncrementValue item="value2" />
+      <DisplayValue item="value2" />
+    </div>
+  );
+};
+
+export default App;
+```
