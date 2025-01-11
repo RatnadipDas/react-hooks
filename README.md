@@ -547,7 +547,7 @@ const value = useContext(SomeContext);
 ### Example
 The app below describes an use case of `useContext` Hook. We will use `useContext` to provide global theme, getter method to get the current theme mode and setter method to change the current theme mode.
 
-First inside the `context` folder we will crate there files namely: `themeContext.ts, ThemeProvider.tsx`.
+First inside the `contexts` folder we will crate there files namely: `themeContext.ts, ThemeProvider.tsx`.
 
 Contents of the `themeContext.ts` file:
 ```tsx
