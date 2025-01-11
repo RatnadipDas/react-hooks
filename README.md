@@ -547,23 +547,19 @@ const value = useContext(SomeContext);
 ### Example
 The app below describes an use case of `useContext` Hook. We will use `useContext` to provide global theme, getter method to get the current theme mode and setter method to change the current theme mode.
 
-First inside the `Context` folder we will crate there files namely: `theme.d.ts, themeContext.ts, ThemeState.tsx`.
+First inside the `Context` folder we will crate there files namely: `themeContext.ts, ThemeProvider.tsx`.
 
-Contents of `theme.d.ts` file:
+Contents of the `themeContext.ts` file:
 ```tsx
+import { createContext, Dispatch, SetStateAction } from "react";
+
 export type Theme = "DARK" | "LIGHT";
 export type ThemeStyle = {
   color: string;
   backgroundColor: string;
 };
-```
 
-Contents of the `themeContext.ts` file:
-```tsx
-import { createContext, Dispatch, SetStateAction } from "react";
-import { Theme, ThemeStyle } from "./theme";
-
-type ThemeContextType = {
+export type ThemeContextType = {
   theme: Theme;
   themeStyle: ThemeStyle;
   setTheme: Dispatch<SetStateAction<Theme>>;
@@ -583,13 +579,12 @@ const themeContext = createContext<ThemeContextType>({
 export default themeContext;
 ```
 
-Contents of the `ThemeState.tsx` file:
+Contents of the `ThemeProvider.tsx` file:
 ```tsx
 import { PropsWithChildren, useState } from "react";
-import ThemeContext from "./themeContext";
-import { Theme } from "./theme";
+import ThemeContext, { Theme } from "./themeContext";
 
-const ThemeState = ({ children }: PropsWithChildren) => {
+const ThemeProvider = ({ children }: PropsWithChildren) => {
   const [theme, setTheme] = useState<Theme>("DARK");
   const themeStyle = {
     color: theme === "DARK" ? "#fff" : "#333",
@@ -603,7 +598,7 @@ const ThemeState = ({ children }: PropsWithChildren) => {
   );
 };
 
-export default ThemeState;
+export default ThemeProvider;
 ```
 
 Now, we add the following code to the `main.tsx` or `index.tsx` file:
@@ -612,13 +607,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import ThemeState from "./Context/ThemeState.tsx";
+import ThemeProvider from "./contexts/ThemeProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <ThemeState>
+    <ThemeProvider>
       <App />
-    </ThemeState>
+    </ThemeProvider>
   </React.StrictMode>
 );
 ```
@@ -626,7 +621,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 And then will write codes for our main app logic inside the `App.tsx` file:
 ```tsx
 import { useContext } from "react";
-import themeContext from "./Context/themeContext";
+import themeContext from "./contexts/themeContext";
 
 const App = () => {
   const { theme, themeStyle, setTheme } = useContext(themeContext);
