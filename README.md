@@ -565,7 +565,7 @@ export type ThemeContextType = {
   setTheme: Dispatch<SetStateAction<Theme>>;
 };
 
-const themeContext = createContext<ThemeContextType>({
+const ThemeContext = createContext<ThemeContextType>({
   theme: "LIGHT",
   themeStyle: {
     color: "#333",
@@ -576,7 +576,7 @@ const themeContext = createContext<ThemeContextType>({
   },
 });
 
-export default themeContext;
+export default ThemeContext;
 ```
 
 Contents of the `ThemeProvider.tsx` file:
